@@ -179,3 +179,12 @@ az containerapp update \
    ```
 
 8. **No Azure Functions runtime** — This is a plain Flask app, not Azure Functions. There is no `function.json`, no bindings, no triggers — just HTTP routes served by Flask + Gunicorn.
+
+## Results
+
+```bash
+$results = Invoke-RestMethod -Method POST -Uri "https://<cont-app-name>.<region-name>.azurecontainerapps.io/alt-text" `
+  -ContentType "application/json" `
+  -Body '{"image_url": "https://i8.amplience.net/i/epsonemear/a17839-productpicture-hires-nl-nl-et-1810-1_header_2000x2000?fmt=auto&img404=missing_product&v=1", "target_language_codes": ["de"]}'
+```
+![image of result](image.png)
