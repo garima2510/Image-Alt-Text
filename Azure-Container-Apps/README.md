@@ -4,6 +4,7 @@
 
 This app generates alt text for product images using Azure OpenAI (Phi-4-multimodal-instruct) and optionally translates it into multiple languages. It runs as a plain Flask web app inside a Docker container on Azure Container Apps.
 
+The container_app.py uses SLM to translate while alt_translate use Azure Translation Service to translate
 ---
 
 ## Architecture
@@ -103,13 +104,16 @@ az containerapp update \
     DEPLOYMENT_NAME="Phi-4-multimodal-instruct" \
     API_VERSION="2024-05-01-preview" \
     ALT_TEXT_PROMPT_PATH="/app/system_prompt.txt" \
-    AZURE_CLIENT_ID="$IDENTITY_CLIENT_ID"
+    AZURE_CLIENT_ID="$IDENTITY_CLIENT_ID" \
+    TRANSLATOR_ENDPOINT="https://api.cognitive.microsofttranslator.com/" \
+    TRANSLATOR_REGION="<region_name>" \
+    TRANSLATOR_RESOURCE_ID="/subscriptions/<sub_id>/resourceGroups/<RG_NAME>/providers/Microsoft.CognitiveServices/accounts/<Service_Name>"
 ```
 
 ### 8. Test
 
 ```powershell
-Invoke-RestMethod -Method POST -Uri "https://<your-app-fqdn>/alt-text" `
+Invoke-RestMethod -Method POST -Uri "https://<your-app-fqdn>/alt-text" ` #or alt-translate based on which app
   -ContentType "application/json" `
   -Body '{"image_url": "https://example.com/image.jpg", "target_language_codes": ["de", "es"]}'
 ```
