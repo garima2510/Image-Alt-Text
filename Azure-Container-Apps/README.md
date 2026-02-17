@@ -5,6 +5,7 @@
 This app generates alt text for product images using Azure OpenAI (Phi-4-multimodal-instruct) and optionally translates it into multiple languages. It runs as a plain Flask web app inside a Docker container on Azure Container Apps.
 
 The container_app.py uses SLM to translate while alt_translate use Azure Translation Service to translate
+
 ---
 
 ## Architecture
