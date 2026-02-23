@@ -1,7 +1,6 @@
 // ── Configuration ──
-// Uses SWA Linked Backend — requests to /api/ are proxied to the Container App.
-// No backend URL is exposed in the code.
-const API_URL = "/api/alt-translate";
+const API_URL =
+  "https://contapp-eus2-translate.livelytree-8516c0db.eastus2.azurecontainerapps.io/alt-translate";
 
 // Language code → display name mapping (for known checkbox languages)
 const LANGUAGE_NAMES = {
