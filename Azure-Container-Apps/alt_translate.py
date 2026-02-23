@@ -5,10 +5,15 @@ from typing import List
 
 import requests as http_requests
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from openai import AzureOpenAI
 
 app = Flask(__name__)
+
+# CORS — restrict to Static Web App domain via env var, default allows all for local dev
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*")
+CORS(app, origins=ALLOWED_ORIGINS.split(","))
 
 LANGUAGE_NAMES = {
     "nl": "Dutch",
@@ -18,10 +23,11 @@ LANGUAGE_NAMES = {
     "it": "Italian",
     "pt": "Portuguese",
     "ja": "Japanese",
-    "zh": "Simplified Chinese",
+    "zh-Hans": "Simplified Chinese",
+    "zh-Hant": "Traditional Chinese",
     "sv": "Swedish",
     "da": "Danish",
-    "no": "Norwegian",
+    "nb": "Norwegian",
     "hi": "Hindi",
 }
 
@@ -133,6 +139,25 @@ def translate_alt_text(text: str, target_codes: List[str]) -> dict:
     return translations
 
 
+# Cache of supported language codes from Azure Translator
+_supported_languages_cache = None
+
+
+def _get_supported_languages() -> set:
+    """Fetch the list of languages supported by Azure Translator (cached)."""
+    global _supported_languages_cache
+    if _supported_languages_cache is not None:
+        return _supported_languages_cache
+
+    url = TRANSLATOR_ENDPOINT.rstrip("/") + "/languages"
+    params = {"api-version": "3.0", "scope": "translation"}
+    resp = http_requests.get(url, params=params, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    _supported_languages_cache = set(data.get("translation", {}).keys())
+    return _supported_languages_cache
+
+
 def _parse_language_codes(raw_codes) -> List[str]:
     if raw_codes is None:
         return []
@@ -157,6 +182,18 @@ def alt_translate():
         target_language_codes = _parse_language_codes(payload.get("target_language_codes"))
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
+
+    # Validate language codes against Azure Translator
+    try:
+        supported = _get_supported_languages()
+        unsupported = [c for c in target_language_codes if c.lower() != "en" and c not in supported]
+        if unsupported:
+            return jsonify({
+                "error": f"Unsupported language(s): {', '.join(unsupported)}. "
+                         f"Use /languages to see supported codes."
+            }), 400
+    except Exception as exc:
+        logging.warning("Could not validate language codes: %s", exc)
 
     try:
         alt_text_en = generate_alt_text(image_url)

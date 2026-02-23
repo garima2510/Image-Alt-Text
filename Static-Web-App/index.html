@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alt-Text Translator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <header class="chat-header">
+      <h1>Alt-Text Translator</h1>
+      <p>Paste a product image URL, pick languages, and get translated alt text.</p>
+    </header>
+
+    <div id="chat-messages" class="chat-messages">
+      <div class="message bot-message">
+        <div class="message-content">
+          👋 Welcome! Paste an image URL below and select the languages you'd like translations for.
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <!-- Language selector -->
+      <div class="language-selector">
+        <button type="button" id="lang-toggle" class="lang-toggle-btn">🌐 Select languages ▾</button>
+        <div id="lang-dropdown" class="lang-dropdown hidden">
+          <div class="lang-actions">
+            <button type="button" id="select-all">Select all</button>
+            <button type="button" id="select-none">Clear</button>
+          </div>
+          <div class="lang-grid">
+            <label><input type="checkbox" value="nl" /> Dutch</label>
+            <label><input type="checkbox" value="fr" /> French</label>
+            <label><input type="checkbox" value="de" /> German</label>
+            <label><input type="checkbox" value="es" /> Spanish</label>
+            <label><input type="checkbox" value="it" /> Italian</label>
+            <label><input type="checkbox" value="pt" /> Portuguese</label>
+            <label><input type="checkbox" value="ja" /> Japanese</label>
+            <label><input type="checkbox" value="zh-Hans" /> Chinese (Simplified)</label>
+            <label><input type="checkbox" value="sv" /> Swedish</label>
+            <label><input type="checkbox" value="da" /> Danish</label>
+            <label><input type="checkbox" value="nb" /> Norwegian</label>
+            <label><input type="checkbox" value="hi" /> Hindi</label>
+          </div>
+          <div class="custom-lang">
+            <label for="custom-lang-input">Other languages (name or code, comma-separated):</label>
+            <input type="text" id="custom-lang-input" placeholder="e.g. Tamil, ko, Arabic" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+
+      <!-- URL input -->
+      <form id="chat-form" class="chat-form">
+        <input
+          type="url"
+          id="image-url"
+          placeholder="Paste image URL here…"
+          required
+          autocomplete="off"
+        />
+        <button type="submit" id="send-btn">Generate</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
