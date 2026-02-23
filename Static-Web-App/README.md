@@ -83,7 +83,8 @@ The Container App uses `flask-cors` to handle cross-origin requests from the Sta
 ### EasyAuth Must Be Disabled
 
 Azure Container Apps has a platform-level authentication feature ("EasyAuth"). If enabled, it intercepts **all** incoming requests — including CORS preflight `OPTIONS` requests — and returns `401 Unauthorized` before they ever reach Flask. This was the root cause of persistent CORS failures.
-In internal subscriptions, use the Security tag
+
+**In internal subscriptions, use the Security tag**
 
 ```powershell
 # Verify auth is disabled

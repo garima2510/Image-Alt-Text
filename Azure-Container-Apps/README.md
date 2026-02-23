@@ -185,6 +185,8 @@ az containerapp update \
 
 8. **No Azure Functions runtime** — This is a plain Flask app, not Azure Functions. There is no `function.json`, no bindings, no triggers — just HTTP routes served by Flask + Gunicorn.
 
+9. **In internal subscriptions, use the Security tag**
+
 ## Results
 
 ```bash
