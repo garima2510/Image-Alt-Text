@@ -133,3 +133,7 @@ Open `index.html` directly in a browser. The `API_URL` in `app.js` points to the
 | Azure Translator | Translates alt text into target languages |
 | Azure OpenAI | Generates English alt text from images (Phi-4 multimodal) |
 | User-assigned Managed Identity | Authenticates to Translator and OpenAI without keys |
+
+## Screenshot
+
+![screenshot of the app](image.png)
